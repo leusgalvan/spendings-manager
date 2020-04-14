@@ -11,7 +11,9 @@ class DebtStore(
     val allPeople = payers ++ owers
     allPeople.toList.sorted
   }
-  def getOwersFor(payer: String): List[String] = getPeople().filter(_ != payer)
+  def getOwersFor(payer: String): List[String] = {
+    getPeople().filter(_ != payer).filter(ower => getDebt(payer, ower) != 0)
+  }
   def getDebt(payer: String, ower: String): Double = {
     def getDebtOpt(payer: String, ower: String): Option[Double] =
       debtByPerson
