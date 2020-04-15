@@ -1,12 +1,12 @@
 package expenses
 
 import org.specs2.mutable.Specification
-class DebtStoreSpec extends Specification {
-  val debtByPerson: Map[String, Map[String, Double]] =
-    Map("Lisa" -> Map("Veronica" -> 2))
-  val debtStore = new DebtStore(debtByPerson)
 
-  "DebtStore" should {
+class DebtStoreSpec(val emptyDebtStore: DebtStore, val specName: String)
+    extends Specification {
+  val debtStore = emptyDebtStore + Debt("Lisa", "Veronica", 2)
+
+  specName should {
     "return people in alphabetical order" in {
       debtStore.getPeople() shouldEqual List("Lisa", "Veronica")
     }
