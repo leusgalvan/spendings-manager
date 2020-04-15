@@ -9,12 +9,9 @@ class SpendingsReporterSpec extends Specification with Mockito {
 
   "Expense report" should {
     "show a basic report" in {
-      val debtStore = new MapDebtStore(
-        Map[String, Map[String, Double]](
-          "Alice" -> Map("Bob" -> 24.0),
-          "Bob" -> Map("Chris" -> 25.30)
-        )
-      )
+      val debtStore = DebtStore.empty +
+        Debt("Alice", "Bob", 24.0) +
+        Debt("Bob", "Chris", 25.30)
       val expenseReport = new SpendingsReporter
       val expectedReport =
         s"""Alice:

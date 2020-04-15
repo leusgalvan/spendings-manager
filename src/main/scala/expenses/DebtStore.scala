@@ -11,7 +11,7 @@ trait DebtStore {
 }
 
 object DebtStore {
-  def empty = new ListDebtStore(Nil)
+  def empty: DebtStore = new ListDebtStore(Nil)
 }
 
 case class Debt(payer: String, ower: String, amount: Double)

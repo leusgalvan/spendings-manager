@@ -10,12 +10,7 @@ class SpendingsAppSpec extends Specification with Mockito {
       val spendingsReader = mock[SpendingsReader]
       spendingsReader.readSpendings() returns spendings
 
-      val debtStore = new MapDebtStore(
-        Map(
-          "Viviana" -> Map("Roberto" -> -500),
-          "Roberto" -> Map("Viviana" -> 500)
-        )
-      )
+      val debtStore = DebtStore.empty + Debt("Roberto", "Viviana", 500)
       val debtCalculator = mock[DebtCalculator]
       debtCalculator.calculateDebt(spendings.toList) returns debtStore
 
