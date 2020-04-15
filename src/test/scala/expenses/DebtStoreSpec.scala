@@ -4,21 +4,28 @@ import org.specs2.mutable.Specification
 
 class DebtStoreSpec(val emptyDebtStore: DebtStore, val specName: String)
     extends Specification {
-  val debtStore = emptyDebtStore + Debt("Lisa", "Veronica", 2)
+  val debtStore = emptyDebtStore +
+    Debt("Lisa", "Veronica", 2) +
+    Debt("Bob", "Lisa", 10)
 
   specName should {
     "return people in alphabetical order" in {
-      debtStore.getPeople() shouldEqual List("Lisa", "Veronica")
+      debtStore.getPeople() shouldEqual List("Bob", "Lisa", "Veronica")
     }
 
     "get owers for a given payer" in {
-      debtStore.getOwersFor("Lisa") shouldEqual List("Veronica")
+      debtStore.getOwersFor("Lisa") shouldEqual List("Bob", "Veronica")
       debtStore.getOwersFor("Veronica") shouldEqual List("Lisa")
+      debtStore.getOwersFor("Bob") shouldEqual List("Lisa")
     }
 
     "get debt between given payer and ower" in {
       debtStore.getDebt("Lisa", "Veronica") shouldEqual 2
       debtStore.getDebt("Veronica", "Lisa") shouldEqual -2
+      debtStore.getDebt("Bob", "Lisa") shouldEqual 10
+      debtStore.getDebt("Lisa", "Bob") shouldEqual -10
+      debtStore.getDebt("Veronica", "Bob") shouldEqual 0
+      debtStore.getDebt("Bob", "Veronica") shouldEqual 0
     }
 
     "update debt for given payer and ower when both already exist" in {
@@ -40,9 +47,9 @@ class DebtStoreSpec(val emptyDebtStore: DebtStore, val specName: String)
     }
 
     "update debt for given payer and ower when neither exist" in {
-      val updatedDebtStore = debtStore.updateDebt("Bob", "Alice", _ + 3)
-      updatedDebtStore.getDebt("Bob", "Alice") shouldEqual 3
-      updatedDebtStore.getDebt("Alice", "Bob") shouldEqual -3
+      val updatedDebtStore = debtStore.updateDebt("Chris", "Alice", _ + 3)
+      updatedDebtStore.getDebt("Chris", "Alice") shouldEqual 3
+      updatedDebtStore.getDebt("Alice", "Chris") shouldEqual -3
     }
   }
 }
